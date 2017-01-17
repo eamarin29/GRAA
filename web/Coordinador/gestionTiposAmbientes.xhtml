@@ -1,0 +1,127 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>GRAA-Gestion de Ambientes</title>
+                <link href="css/estilos.css" rel="stylesheet" type="text/css" /> 
+                <link rel="icon" type="image/gif" href="../images/favicon.gif" />
+            </f:facet>
+        </h:head>
+
+        <h:body style="font-size: 12px;">
+
+            <p:layout fullPage="true">
+
+                <p:layoutUnit  position="north" size="120"  resizable="true">
+                    <h1>Gestion de Tipos de ambientes</h1>
+
+                </p:layoutUnit>
+
+                <p:layoutUnit position="south" size="100" closable="true" collapsible="true">
+                    Footer
+                </p:layoutUnit>
+
+                <p:layoutUnit position="west" size="175" header="Minimizar" collapsible="true" >
+                    <h:form>
+                        <p:menu>
+                            <p:submenu label="Menu">
+                               <p:menuitem value="Gestion de Reservas" outcome="gestionReservaCoordinadores" />
+                                <p:menuitem value="Gestion de Personal" outcome="gestionPersonal" />
+                                <p:menuitem value="Gestion de tipos de Ambientes" outcome="gestionTiposAmbientes" />
+                                <p:menuitem value="Gestion de Sedes" outcome="gestionSedes" />
+                               <p:menuitem value="Gestion de Ambientes" outcome="gestionAmbiente" />
+                               <p:menuitem value="Gestion de Coordinadores" outcome="gestionCoordinador" />
+                               <p:menuitem value="Gestion de Funcionarios" outcome="gestionFuncionario" />
+                               <p:menuitem value="Gestion de Instructores" outcome="gestionInstructor" />
+                               <p:menuitem value="Gestion de Guarda" outcome="gestionGuarda" />
+
+                            </p:submenu>
+
+                        </p:menu>
+                    </h:form>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center">
+                    
+                    <h:form  id="frmTiposAmbientes">
+                       
+                        <p:growl id="growl" showDetail="true" sticky="true" />
+                        <p:panel id="panelGestionTiposAmbientes" header="Gestion de Tipos de ambientes">
+                            <p:panelGrid style="margin: auto; ">
+                                <p:row>
+
+                                    <p:column><h:outputText value="Id:"/></p:column>
+                                    <p:column><p:inputText id="txtIdTipoAmbiente"  value="#{vistaTiposAmbientes.txtIdTipoAmbiente}" size="25"  disabled="true"/></p:column>
+
+                                    <p:column><h:outputText value="Nombre:" /></p:column>
+                                    <p:column><p:inputText id="txtNombreTipoAmbiente" binding="#{vistaTiposAmbientes.txtNombreTipoAmbiente}" size="25" /></p:column>
+
+                                </p:row>
+  
+                                <p:row>
+                                    <p:column colspan="8" style="text-align: center;">
+                                        <p:growl id="message" showDetail="true" />
+                                        
+                                        <p:commandButton value="Registrar" binding="#{vistaTiposAmbientes.btnRegistrar}" action="#{vistaTiposAmbientes.registrarTipo()}" update="frmTiposAmbientes, message">
+                                        <p:confirm header="Confirmation" message="¿Está seguro que desea Registrar este Tipo de ambiente?" icon="ui-icon-alert" />
+                                       </p:commandButton>
+                                        
+                                        <p:commandButton value="Modificar" binding="#{vistaTiposAmbientes.btnModificar}" action="#{vistaTiposAmbientes.modificarTipoAmbiente()}" update="frmTiposAmbientes, message" disabled="true">
+                                        <p:confirm header="Confirmation" message="¿Está seguro que desea Modificar este Tipo de ambiente?" icon="ui-icon-alert" />
+                                        </p:commandButton>
+                                        
+                                        <p:commandButton value="Eliminar" binding="#{vistaTiposAmbientes.btnEliminar}" action="#{vistaTiposAmbientes.eliminarTipoAmbiente()}" update="frmTiposAmbientes, message" disabled="true">
+                                      <p:confirm header="Confirmation" message="¿Está seguro que desea Eliminar este Tipo de ambiente?" icon="ui-icon-alert" />
+                                        </p:commandButton>
+                                        
+                                        <p:commandButton value="Limpiar" binding="#{vistaTiposAmbientes.btnLimpiar}"  action="#{vistaTiposAmbientes.limpiar()}" update="frmTiposAmbientes, message"/>
+                                    
+                                                                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                            <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                        </p:confirmDialog>
+                                    
+                                    </p:column>
+                                </p:row>
+                                
+                                     </p:panelGrid>
+                        </p:panel>
+                                
+                                         
+                                <p:dataTable id="tablaTiposAmbientes" var="tipos" value="#{vistaTiposAmbientes.listaTipoAmbiente}" rows="5"
+                                     paginator="true" rowsPerPageTemplate="5,10,15"
+                                     selectionMode="single"
+                                     selection="#{vistaTiposAmbientes.tipoAmbienteSeleccionad}"
+                                     emptyMessage="Sin datos"
+                                     rowKey="#{tipos.codigotipoambiente}" 
+                                     >
+                            
+                                    <p:ajax event="rowSelect" listener="#{vistaTiposAmbientes.onRowSelect}" update=":frmTiposAmbientes"/>
+                            
+                            <p:column headerText="Id">
+                                <h:outputText value="#{tipos.codigotipoambiente}"/>
+                            </p:column>
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{tipos.descripciontipoambiente}"/>
+                            </p:column>
+                             
+                        </p:dataTable>
+                       
+                    </h:form>
+                    
+                </p:layoutUnit>
+               
+            </p:layout>
+
+        </h:body>
+
+    </f:view>
+</html>
